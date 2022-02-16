@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+apply plugin: 'java'
+
+group 'StringReplacer'
+version '0.0.1'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+compileJava.options.compilerArgs << "-parameters"
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.9'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
