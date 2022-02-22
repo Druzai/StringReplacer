@@ -18,6 +18,7 @@ import static javax.swing.GroupLayout.Alignment.*;
 
 public class App extends JFrame implements ActionListener {
     private final Config config;
+    private ReplacingThread thread;
     private final JButton jButtonSave = new JButton("Save config");
     private final JButton jButtonChoose = new JButton("Choose folder");
     private final JButton jButtonStart = new JButton("Start!");
@@ -30,6 +31,7 @@ public class App extends JFrame implements ActionListener {
 
     public App() throws IOException {
         config = Config.readFromJson();
+        thread = null;
         setup_UI();
         if (config.getDarkTheme())
             changeToDark();
@@ -129,27 +131,6 @@ public class App extends JFrame implements ActionListener {
         groupLayout.linkSize(SwingConstants.VERTICAL, textFields[2], jButtonStart);
     }
 
-    private void replaceStringRecursively() throws IOException {
-        List<Path> files = Files.find(Paths.get(config.getPathToFolder()), 999,
-                (p, bfa) -> bfa.isRegularFile()).collect(Collectors.toList());
-        for (Path file : files) {
-            try (FileReader fileReader = new FileReader(file.toFile())) {
-                int i;
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((i = fileReader.read()) != -1)
-                    stringBuilder.append((char) i);
-                String str = stringBuilder.toString().replace(config.getReplaceString(), config.getReplaceToString());
-                try (FileWriter fileWriter = new FileWriter(file.toFile())) {
-                    fileWriter.append(str);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -182,23 +163,13 @@ public class App extends JFrame implements ActionListener {
                 Config.saveToJson(config);
             } catch (IOException ignored) {
             }
-        } else if (e.getSource() == jButtonStart) {
+        } else if (e.getSource() == jButtonStart && (thread == null || thread.isDone())) {
             config.setPathToFolder(textFields[0].getText().trim());
             config.setReplaceString(textFields[1].getText().trim());
             config.setReplaceToString(textFields[2].getText().trim());
-            try {
-                replaceStringRecursively();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            JFrame jFrame = new JFrame("Done");
-            jFrame.setLayout(new FlowLayout());
-            jFrame.add(new Label("Files processed!"));
-            jFrame.setMinimumSize(new Dimension(250, 90));
-            jFrame.setLocationRelativeTo(this);
-            jFrame.setResizable(false);
-            jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            jFrame.setVisible(true);
+            thread = new ReplacingThread(config, this, jButtonStart);
+            thread.execute();
+            jButtonStart.setEnabled(false);
         } else if (e.getSource() == items[0] || e.getSource() == items[1]) {
             if (e.getSource() == items[0]) {
                 changeToWhite();
@@ -223,8 +194,8 @@ public class App extends JFrame implements ActionListener {
             assert iconURL != null; // iconURL is null when not found
             JLabel pic = new JLabel(new ImageIcon(iconURL));
             jFrame2.add(pic);
-            jFrame2.add(new Label("String Replacer v0.0.1"));
-            jFrame2.setMinimumSize(new Dimension(250, 90));
+            jFrame2.add(new Label("String Replacer v0.0.2 by Druzai"));
+            jFrame2.setMinimumSize(new Dimension(270, 90));
             jFrame2.setLocationRelativeTo(this);
             jFrame2.setResizable(false);
             jFrame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
