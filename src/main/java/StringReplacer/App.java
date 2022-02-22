@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static javax.swing.GroupLayout.Alignment.*;
 
@@ -159,6 +163,19 @@ public class App extends JFrame implements ActionListener {
             config.setPathToFolder(textFields[0].getText().trim());
             config.setReplaceString(textFields[1].getText().trim());
             config.setReplaceToString(textFields[2].getText().trim());
+
+            if (!isValidPath(config.getPathToFolder())) {
+                JFrame jFrame3 = new JFrame("Error");
+                jFrame3.setLayout(new FlowLayout());
+                jFrame3.add(new Label("Path string is wrong!"));
+                jFrame3.setMinimumSize(new Dimension(240, 90));
+                jFrame3.setLocationRelativeTo(this);
+                jFrame3.setResizable(false);
+                jFrame3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                jFrame3.setVisible(true);
+                return;
+            }
+
             thread = new ReplacingThread(config, this, jButtonStart);
             thread.execute();
             jButtonStart.setEnabled(false);
@@ -192,6 +209,14 @@ public class App extends JFrame implements ActionListener {
             jFrame2.setResizable(false);
             jFrame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             jFrame2.setVisible(true);
+        }
+    }
+
+    private static boolean isValidPath(String path) {
+        try {
+            return Files.exists(Paths.get(path));
+        } catch (InvalidPathException | NullPointerException ex) {
+            return false;
         }
     }
 
