@@ -1,18 +1,13 @@
 package StringReplacer;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static javax.swing.GroupLayout.Alignment.*;
 
@@ -75,9 +70,6 @@ public class App extends JFrame implements ActionListener {
             labels[i] = new JLabel(labelArray[i]);
             textFields[i] = new JTextField(textAreaArray[i]);
             textFields[i].setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-//            textFields[i].setBorder(new EtchedBorder());
-//            textFields[i].setMargin(new Insets(10,10,10,10));
-//            textFields[i].setBorder(new LineBorder(new Color(0,0,0)));
         }
 
         this.setLayout(new BorderLayout());
@@ -205,13 +197,9 @@ public class App extends JFrame implements ActionListener {
 
     private void changeToWhite() {
         try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             UIManager.put("control", new Color(214, 217, 223));
             UIManager.put("Button.background", new Color(214, 217, 223));
-//            UIManager.put("Button.foreground", new Color(0, 0, 0));
             UIManager.put("info", new Color(242, 242, 189));
-//            UIManager.put("menu", new Color(237,239,242));
-//            UIManager.put("Menu[Enabled].textForeground", new Color(35,35,36));
             UIManager.put("nimbusBase", new Color(51, 98, 140));
             UIManager.put("FileChooser.background", new Color(214, 217, 223));
             UIManager.put("nimbusAlertYellow", new Color(255, 220, 35));
@@ -243,14 +231,9 @@ public class App extends JFrame implements ActionListener {
 
     private void changeToDark() {
         try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             UIManager.put("control", new Color(65, 68, 77));
-//            UIManager.put("control", new Color(54, 57, 63));
             UIManager.put("Button.background", new Color(27, 28, 31, 255));
-//            UIManager.put("Button.foreground", new Color(59, 68, 75));
             UIManager.put("info", new Color(54, 57, 63));
-//            UIManager.put("menu", new Color(36, 38, 42));
-//            UIManager.put("Menu[Enabled].textForeground", new Color(255, 255, 255));
             UIManager.put("nimbusBase", new Color(10, 10, 10));
             UIManager.put("FileChooser.background", new Color(54, 57, 63));
             UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
@@ -258,9 +241,7 @@ public class App extends JFrame implements ActionListener {
             UIManager.put("nimbusFocus", new Color(18, 126, 170));
             UIManager.put("nimbusGreen", new Color(176, 179, 50));
             UIManager.put("nimbusInfoBlue", new Color(66, 139, 221));
-//            UIManager.put("nimbusLightBackground", new Color(54, 57, 63));
             UIManager.put("nimbusLightBackground", new Color(54, 57, 63));
-//            UIManager.put("nimbusLightBackground", new Color(65, 68, 77));
             UIManager.put("nimbusOrange", new Color(191, 98, 4));
             UIManager.put("nimbusRed", new Color(169, 46, 34));
             UIManager.put("nimbusSelection", new Color(32, 35, 37));
@@ -268,10 +249,6 @@ public class App extends JFrame implements ActionListener {
             UIManager.put("nimbusSelectedText", new Color(255, 255, 255));
             UIManager.put("nimbusSelectionBackground", new Color(25, 143, 194));
             UIManager.put("text", new Color(255, 255, 255));
-//            Painter<TextField> painter = (com.sun.java.swing.Painter<TextField>) (g, object, width, height) -> {
-//                g.setBackground(object.getBackground());
-//            };
-//            UIManager.put("TextField[Disabled].borderPainter", painter);
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             jButtonStart.setBackground(new Color(27, 28, 31));
             jButtonChoose.setBackground(new Color(27, 28, 31));
